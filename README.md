@@ -2,6 +2,11 @@
 
 Full-stack Calendly-style scheduling app with a Next.js frontend and a Node/Express + Prisma backend.
 
+## Live Demo
+
+Deployed on AWS EC2:  
+http://13.126.13.252/
+
 ## Tech Stack
 
 - Frontend: Next.js 16 (App Router), React 19, ESLint
