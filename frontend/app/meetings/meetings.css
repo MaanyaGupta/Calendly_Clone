@@ -380,23 +380,75 @@
   color: var(--white);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ===== Tablet Responsive ===== */
+@media (max-width: 1024px) {
   .meetings-header,
   .meetings-tabs,
   .meetings-list {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  .meetings-header {
+    padding: 16px 16px 0;
+  }
+
+  .meetings-title {
+    font-size: 20px;
+  }
+
+  .meetings-tabs {
+    padding: 16px 16px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .meetings-tab {
+    padding: 10px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .meetings-list {
+    padding: 16px 16px 100px; /* bottom nav space */
+  }
+
+  .meeting-card-top {
+    padding: 12px 14px 0;
   }
 
   .meeting-card-body {
     flex-direction: column;
     gap: 12px;
+    padding: 10px 14px 14px;
+  }
+
+  .meeting-event-name {
+    font-size: 15px;
   }
 
   .meeting-meta {
     flex-direction: column;
     gap: 6px;
+  }
+
+  .meeting-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .meeting-cancel-btn,
+  .meeting-reschedule-btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Reschedule modal */
+  .rs-modal {
+    width: 95%;
   }
 
   .rs-body {
@@ -405,5 +457,12 @@
 
   .rs-slots {
     width: 100%;
+    max-height: 200px;
+  }
+
+  /* Empty state */
+  .meetings-empty {
+    padding: 60px 16px;
   }
 }
+

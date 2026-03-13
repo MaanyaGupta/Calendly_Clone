@@ -820,8 +820,12 @@
   box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
 }
 
-/* Responsive */
-@media (max-width: 900px) {
+/* ===== Tablet Responsive ===== */
+@media (max-width: 1024px) {
+  .avail-page {
+    padding: 0 24px 40px;
+  }
+
   .avail-grid {
     grid-template-columns: 1fr;
   }
@@ -842,13 +846,31 @@
   }
 }
 
+/* ===== Mobile Responsive ===== */
 @media (max-width: 768px) {
   .avail-page {
-    padding: 0 16px 40px;
+    padding: 0 16px 100px; /* bottom nav space */
+  }
+
+  .avail-header h1 {
+    font-size: 20px;
+  }
+
+  .avail-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .avail-tab {
+    white-space: nowrap;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 
   .save-bar {
     left: 0;
+    bottom: 64px; /* above bottom nav */
+    padding: 12px 16px;
   }
 
   .schedule-header {
@@ -857,6 +879,32 @@
     gap: 12px;
   }
 
+  .view-toggle {
+    width: 100%;
+  }
+
+  .view-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Day rows on mobile */
+  .day-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .slot-row {
+    flex-wrap: wrap;
+  }
+
+  .time-input {
+    width: 80px;
+    font-size: 12px;
+    padding: 6px 6px;
+  }
+
+  /* Calendar view adjustments */
   .schedule-calendar-weekday,
   .schedule-calendar-cell {
     padding: 8px;
@@ -872,6 +920,13 @@
     font-size: 12px;
   }
 
+  /* Override items */
+  .override-item {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+  }
+
   .override-main,
   .override-editor,
   .override-time-controls,
@@ -883,4 +938,16 @@
   .override-time-picker {
     flex-wrap: wrap;
   }
+
+  /* Calendar modal */
+  .calendar-modal {
+    width: 95%;
+    padding: 20px;
+  }
+
+  /* Timezone */
+  .timezone-select {
+    max-width: 100%;
+  }
 }
+
