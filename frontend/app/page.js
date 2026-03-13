@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { buildApiUrl } from '../lib/api';
@@ -11,6 +11,14 @@ const COLORS = [
 ];
 
 export default function SchedulingPage() {
+  return (
+    <Suspense fallback={<div className="loading"><div className="loading-spinner"></div></div>}>
+      <SchedulingPageContent />
+    </Suspense>
+  );
+}
+
+function SchedulingPageContent() {
   const searchParams = useSearchParams();
   const [eventTypes, setEventTypes] = useState([]);
   const [loading, setLoading] = useState(true);
