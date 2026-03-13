@@ -20,6 +20,7 @@ export default function SchedulingPage() {
 
 function SchedulingPageContent() {
   const searchParams = useSearchParams();
+  const [isMounted, setIsMounted] = useState(false);
   const [eventTypes, setEventTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,6 +32,7 @@ function SchedulingPageContent() {
   const menuRef = useRef(null);
 
   useEffect(() => {
+    setIsMounted(true);
     fetchEventTypes();
   }, []);
 
@@ -150,13 +152,27 @@ function SchedulingPageContent() {
       {/* Search */}
       <div className="search-bar" style={{ position: 'relative' }}>
         <span className="search-icon">🔍</span>
-        <input
-          type="text"
-          placeholder="Search event types"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ paddingLeft: '36px' }}
-        />
+        {!isMounted ? (
+          <input
+            key="server-search"
+            type="text"
+            placeholder="Search event types"
+            defaultValue=""
+            readOnly
+            style={{ paddingLeft: '36px' }}
+            suppressHydrationWarning
+          />
+        ) : (
+          <input
+            key="client-search"
+            type="text"
+            placeholder="Search event types"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ paddingLeft: '36px' }}
+            suppressHydrationWarning
+          />
+        )}
       </div>
 
       {/* User Section */}

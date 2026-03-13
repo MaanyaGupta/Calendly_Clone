@@ -20,24 +20,47 @@ export default function Sidebar() {
   if (isPublicPage) return null;
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="sidebar-logo">
-          <div className="logo-circle">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
-              <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <div className="logo-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <span className="logo-text">Calendly</span>
           </div>
-          <span className="logo-text">Calendly</span>
         </div>
-      </div>
 
-      <Link href="/?create=true" className="sidebar-create-btn">
-        <span>+</span> Create
-      </Link>
+        <Link href="/?create=true" className="sidebar-create-btn">
+          <span>+</span> Create
+        </Link>
 
-      <nav className="sidebar-nav">
+        <nav className="sidebar-nav">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href ||
+              (item.href === '/' && pathname === '/') ||
+              (item.href !== '/' && pathname?.startsWith(item.href));
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+              >
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label">{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="mobile-bottom-nav">
         {navItems.map((item) => {
           const isActive = pathname === item.href ||
             (item.href === '/' && pathname === '/') ||
@@ -47,14 +70,14 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+              className={`mobile-nav-item ${isActive ? 'active' : ''}`}
             >
-              <span className="nav-icon">{item.icon}</span>
-              <span className="nav-label">{item.label}</span>
+              <span className="mobile-nav-icon">{item.icon}</span>
+              <span className="mobile-nav-label">{item.label}</span>
             </Link>
           );
         })}
       </nav>
-    </aside>
+    </>
   );
 }
