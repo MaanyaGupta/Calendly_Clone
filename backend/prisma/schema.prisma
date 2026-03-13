@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(255)
+  timezone  String   @default("Asia/Kolkata") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  eventTypes            EventType[]
+  availabilitySchedules AvailabilitySchedule[]
+
+  @@map("users")
+}
+
+model EventType {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  name         String   @db.VarChar(200)
+  slug         String   @unique @db.VarChar(200)
+  duration     Int
+  description  String?  @db.Text
+  color        String   @default("#0069ff") @db.VarChar(7)
+  isActive     Boolean  @default(true) @map("is_active")
+  bufferBefore    Int      @default(0) @map("buffer_before")
+  bufferAfter     Int      @default(0) @map("buffer_after")
+  customQuestions Json?    @map("custom_questions")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meetings Meeting[]
+
+  @@map("event_types")
+}
+
+model AvailabilitySchedule {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String   @default("Working Hours") @db.VarChar(100)
+  timezone  String   @default("Asia/Kolkata") @db.VarChar(50)
+  isDefault Boolean  @default(true) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rules         AvailabilityRule[]
+  dateOverrides DateOverride[]
+
+  @@map("availability_schedules")
+}
+
+model AvailabilityRule {
+  id          Int     @id @default(autoincrement())
+  scheduleId  Int     @map("schedule_id")
+  dayOfWeek   Int     @map("day_of_week")
+  startTime   String  @map("start_time") @db.VarChar(5)
+  endTime     String  @map("end_time") @db.VarChar(5)
+  isAvailable Boolean @default(true) @map("is_available")
+
+  schedule AvailabilitySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@map("availability_rules")
+}
+
+model DateOverride {
+  id            Int     @id @default(autoincrement())
+  scheduleId    Int     @map("schedule_id")
+  date          DateTime @db.Date
+  startTime     String?  @map("start_time") @db.VarChar(5)
+  endTime       String?  @map("end_time") @db.VarChar(5)
+  isUnavailable Boolean @default(false) @map("is_unavailable")
+
+  schedule AvailabilitySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@map("date_overrides")
+}
+
+model Meeting {
+  id           Int      @id @default(autoincrement())
+  eventTypeId  Int?     @map("event_type_id")
+  eventTypeName String? @map("event_type_name") @db.VarChar(200)
+  eventTypeDuration Int? @map("event_type_duration")
+  eventTypeColor String? @map("event_type_color") @db.VarChar(7)
+  inviteeName  String   @map("invitee_name") @db.VarChar(200)
+  inviteeEmail String   @map("invitee_email") @db.VarChar(255)
+  guestEmails  String?  @map("guest_emails") @db.Text
+  inviteeTimezone String @default("UTC") @map("invitee_timezone") @db.VarChar(50)
+  startTime       DateTime @map("start_time") @db.Timestamptz()
+  endTime         DateTime @map("end_time") @db.Timestamptz()
+  status          String   @default("scheduled") @db.VarChar(20)
+  cancelReason    String?  @map("cancel_reason") @db.Text
+  customAnswers   Json?    @map("custom_answers")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  eventType EventType? @relation(fields: [eventTypeId], references: [id], onDelete: SetNull)
+
+  @@index([eventTypeId], map: "idx_meetings_event_type")
+  @@index([startTime], map: "idx_meetings_start_time")
+  @@index([status], map: "idx_meetings_status")
+  @@map("meetings")
+}
